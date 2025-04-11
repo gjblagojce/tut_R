@@ -4,7 +4,26 @@ format: html
 editor: visual
 ---
 
-## Getting Started with Bioinformatics in R
+# 00 - Introduction
+
+This notebook introduces basic bioinformatics operations using **R**. We will explore what you can do in R with sequences, biological data, and R packages that support bioinformatics.
+
+## What you can do with R in Bioinformatics
+
+R provides a wide range of packages and tools for bioinformatics, especially via **Bioconductor**. You can:
+
+-   Analyze sequences
+-   Fetch data from online databases
+-   Perform BLAST searches
+-   Visualize biological data
+-   Perform statistical analysis on omics data
+
+In this tutorial series, you'll learn how to handle sequence files, align sequences, retrieve NCBI data, run BLAST queries, and visualize results.
+
+
+## Load Required Libraries
+
+Let's make sure you have the required packages.
 
 ```{r}
 library(Biostrings)
@@ -12,5 +31,44 @@ library(seqinr)
 library(rentrez)
 library(ggplot2)
 library(msa)
-print("Libraries loaded successfully!")
+print("All R libraries are succesfully installed.")
 ```
+
+## Core Bioinformatics Functions (Central Dogma)
+
+```{r}
+library(Biostrings)
+
+sequence <- Biostrings::DNAString("ATGGCGTACGCTAGCTAGCTA")
+cat("Original:", as.character(sequence), "\n")
+
+complement_seq <- Biostrings::complement(sequence)
+cat("Complement:", as.character(complement_seq), "\n")
+
+rev_complement_seq <- Biostrings::reverseComplement(sequence)
+cat("Reverse Complement:", as.character(rev_complement_seq), "\n")
+
+protein <- Biostrings::translate(sequence)
+cat("Translated Protein:", as.character(protein), "\n")
+
+```
+
+## R is great for statistics too!
+
+Here's an example of a simple plot using ggplot2.
+
+```{r}
+# Create a simple bar chart of DNA base counts
+bases <- c(A=20, C=30, G=25, T=25)
+df <- data.frame(Base=names(bases), Count=as.numeric(bases))
+
+ggplot(df, aes(x=Base, y=Count, fill=Base)) +
+  geom_bar(stat="identity") +
+  theme_minimal() +
+  labs(title="Example DNA Base Count")
+
+```
+
+## Summary
+
+This notebook introduced the scope of bioinformatics in R and showed how to set up your environment. Next, we'll explore file formats commonly used in bioinformatics.

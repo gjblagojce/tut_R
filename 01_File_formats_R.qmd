@@ -4,20 +4,91 @@ format: html
 editor: visual
 ---
 
-## FASTA Format
+## 🧬 Common Bioinformatics File Formats
+
+In bioinformatics, different types of biological data are stored in specialized file formats. These include:
+
+-   Sequence data (e.g., DNA, RNA, proteins)
+-   Quality scores from sequencing machines
+-   Annotations, features, and metadata
+
+In this notebook, you’ll learn how to **identify**, **view**, and **read** several common formats using R packages from Bioconductor.
+
+All file examples are stored in the `../data/` folder.
+
+### 📘 FASTA Format
+
+FASTA is one of the most common formats for storing nucleotide or protein sequences. Each record starts with a `>` followed by a sequence ID and optional description, then one or more lines of sequence.
 
 ```{r}
+library(Biostrings)
 fasta_path <- "data/fasta_example.fasta"
-if (!file.exists(fasta_path)) stop("Missing file: data/fasta_example.fasta")
-seqs <- Biostrings::readDNAStringSet(fasta_path)
-print(seqs)
+fasta_seqs <- readDNAStringSet(fasta_path)
+
+# Print ID and sequence
+for (i in seq_along(fasta_seqs)) {
+  cat("ID:", names(fasta_seqs)[i], "\n")
+  cat("Sequence:", as.character(fasta_seqs[[i]]), "\n\n")
+}
+
 ```
 
-## BED Format
+### 📗 FASTQ Format
+
+FASTQ stores sequencing reads and quality scores. Each record consists of: 1. `@` followed by sequence ID 2. Sequence string 3. `+` separator 4. ASCII-encoded quality scores
 
 ```{r}
-bed_path <- "data/example.bed"
-if (!file.exists(bed_path)) stop("Missing file: data/example.bed")
-bed_data <- rtracklayer::import(bed_path)
-print(bed_data)
+library(ShortRead)
+fastq_path <- "data/fastq_example.fastq"
+fastq_reads <- readFastq(fastq_path)
+
+# Print sequence IDs, sequences, and qualities
+for (i in 1:length(fastq_reads)) {
+  cat("ID:", as.character(id(fastq_reads[i])), "\n")
+  cat("Sequence:", as.character(sread(fastq_reads[i])), "\n")
+  cat("Quality:", as.character(quality(quality(fastq_reads[i]))), "\n\n")
+}
+
 ```
+
+
+### 📙 BED Format
+
+BED is used for representing genomic regions or features. We can import BED files using `rtracklayer`.
+
+```{r}
+library(rtracklayer)
+bed_path <- "data/bed_example.bed"
+bed_data <- import(bed_path)
+head(bed_data)
+
+```
+
+### 📒 SAM/BAM Format
+
+These formats store alignments from sequencing reads to reference genomes. We'll use `Rsamtools` to load BAM files.
+
+```{r}
+library(Rsamtools)
+bam_path <- "data/bam_example.bam"
+bam_data <- scanBam(bam_path)
+bam_data[[1]][1:3]
+
+```
+
+### 🧾 VCF Format
+
+VCF is used for storing genetic variants. Use `VariantAnnotation` to read VCF files.
+
+```{r}
+library(VariantAnnotation)
+vcf_path <- "data/vcf_example.vcf"
+vcf <- readVcf(vcf_path, "hg19")
+vcf
+
+```
+
+## ✅ Summary
+
+-   R can handle a wide range of bioinformatics file formats.
+-   Packages from Bioconductor like `Biostrings`, `ShortRead`, `rtracklayer`, `genbankr`, `Rsamtools`, and `VariantAnnotation` make it easy to import and explore biological data.

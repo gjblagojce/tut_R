@@ -1,0 +1,70 @@
+---
+title: "NCBI Database Access"
+format: html
+editor: visual
+---
+
+# 🔎 Accessing NCBI Databases with R
+
+This notebook demonstrates how to use the `rentrez` package to access biological data from **NCBI (National Center for Biotechnology Information)**.
+
+We'll: - List available NCBI databases - Search for the **BRCA1** gene in humans - Fetch GenBank records - Display sequence summaries
+
+## 📚 Step 1: View Available NCBI Databases
+
+```{r}
+library(rentrez)
+dbs <- entrez_dbs()
+cat("Total databases:", length(dbs), "\n")
+head(dbs, 10)
+
+```
+
+## 🔍 Step 2: Search for BRCA1 Gene in Humans (nucleotide db)
+
+```{r}
+
+library(rentrez)
+
+# Optional: set email directly in each function call
+results <- entrez_search(db = "nucleotide",
+                         term = "BRCA1[Gene Name] AND Homo sapiens[Organism]",
+                         retmax = 10,
+                         email = "blagoj4e@gmail.com")
+
+
+cat("Found IDs:", paste(results$ids, collapse=", "), "\n")
+
+```
+
+## 📥 Step 3: Fetch GenBank Records
+
+```{r}
+if (length(results$ids) > 0) {
+  gb_data <- entrez_fetch(db = "nucleotide", 
+                          id = results$ids, 
+                          rettype = "gb", 
+                          retmode = "text")
+  # Save to file
+  writeLines(gb_data, "brca1_records.gb")
+  cat("Saved GenBank records to brca1_records.gb\n")
+} else {
+  cat("No IDs found.\n")
+}
+
+```
+
+## 📖 Step 5: Preview GenBank Text
+
+```{r}
+# Show first few lines of downloaded file
+readLines("brca1_records.gb", n = 20)
+
+```
+
+## ✅ Summary
+
+-   Used `rentrez` to connect to NCBI
+-   Performed gene search
+-   Fetched GenBank data
+-   Saved and inspected sequence records

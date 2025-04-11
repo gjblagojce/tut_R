@@ -1,0 +1,83 @@
+---
+title: "BLAST Practical Flow"
+format: html
+editor: visual
+---
+
+
+# 🧬 Introduction to BLAST in R
+
+**BLAST** (Basic Local Alignment Search Tool) allows you to compare a DNA or protein sequence against a database to find similarities. This notebook demonstrates a BLAST workflow in R using `rentrez`, `genbankr`, and local tools.
+
+We will: - Fetch the *E. coli* genome from NCBI - Extract coding sequences and proteins - Save a protein in FASTA format - Provide instructions to run BLAST (locally or via NCBI)
+
+## 📥 Step 1: Fetch E. coli K12 Genome from NCBI
+
+```{r}
+library(rentrez)
+
+gb <- entrez_fetch(db = "nucleotide", id = "U00096.3", rettype = "gb", retmode = "text", email = "blagoj4e@gmail.com")
+writeLines(gb, "ecoli_k12.gb")
+cat("Genome saved to ecoli_k12.gb\n")
+
+```
+
+## 🧬 Step 2: Parse GenBank and Extract Proteins
+
+## 🧬 Step 2: Parse GenBank and Extract Proteins
+
+```{r}
+library(genbankr)
+record <- readGenBank("ecoli_k12.gb")
+cds_features <- cds(record)
+
+# Use mcols to access translations
+protein_seqs <- mcols(cds_features)$translation
+protein_seqs <- protein_seqs[!is.na(protein_seqs) & nchar(protein_seqs) > 20]
+cat("Found", length(protein_seqs), "proteins with valid translations.\n")
+
+```
+
+## 💾 Step 3: Save a Protein to FASTA
+
+```{r}
+library(Biostrings)
+aa <- AAStringSet(protein_seqs[1])
+names(aa) <- "ecoli_protein_1"
+writeXStringSet(aa, filepath = "ecoli_protein.fasta")
+cat("Saved ecoli_protein.fasta\n")
+
+```
+
+```{r}
+# Run this after you've saved `ecoli_protein.fasta`
+
+# Run BLAST remotely using system call
+system2("blastp",
+        args = c("-query", "ecoli_protein.fasta",
+                 "-db", "nr",
+                 "-remote",
+                 "-out", "blast_result.xml",
+                 "-outfmt", "5"))
+
+# Now parse and show hits
+library(xml2)
+
+blast_xml <- read_xml("blast_result.xml")
+hits <- xml_find_all(blast_xml, ".//Hit")
+
+cat("Top hits:\n")
+for (i in seq_len(min(3, length(hits)))) {
+  hit_id <- xml_text(xml_find_first(hits[[i]], ".//Hit_id"))
+  hit_def <- xml_text(xml_find_first(hits[[i]], ".//Hit_def"))
+  score <- xml_text(xml_find_first(hits[[i]], ".//Hsp_bit-score"))
+  cat(paste0("• ", hit_id, " — ", substr(hit_def, 1, 60), "... [Score: ", score, "]\n"))
+}
+```
+
+## ✅ Summary
+
+-   Fetched GenBank genome
+-   Parsed CDS features and extracted protein
+-   Saved a selected protein in FASTA format
+-   Provided instructions for BLAST query submission

@@ -1,0 +1,14 @@
+LOCUS       SCU49845     25 bp    DNA             PLN       21-JUN-1999
+DEFINITION  Example GenBank entry.
+ACCESSION   SCU49845
+VERSION     SCU49845.1
+KEYWORDS    .
+SOURCE      Artificial Sequence
+  ORGANISM  Artificial Sequence
+            .
+FEATURES             Location/Qualifiers
+     gene            1..10
+                     /gene="example_gene"
+ORIGIN
+        1 atggcgtaaa tagctagcta ctagc
+//

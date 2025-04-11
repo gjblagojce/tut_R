@@ -14,6 +14,16 @@ website:
         href: 00_Introduction_R.qmd
       - text: "File Formats"
         href: 01_File_formats_R.qmd
+      - text: "Basic Sequence handling"
+        href: 02_Basic_sequence_handling_R.qmd
+      - text: "Sequence Alignment"
+        href: 03_Sequence_alignment_R.qmd
+      - text: "NCBI Database Access"
+        href: 04_NCBI_database_access_R.qmd
+      - text: "BLAST practical flow"
+        href: 05_BLAST_practical_flow_R.qmd
+      - text: "Data visualization"
+        href: 06_Data_visualization_R.qmd
 
 format:
   html:

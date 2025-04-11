@@ -8,7 +8,7 @@ editor: visual
 
 Explore `.qmd` tutorials interactively in RStudio. This site includes:
 
-- Sequence handling
-- File formats like FASTA, VCF, BED
-- NCBI queries
-- Bioinformatics package use with Bioconductor
+-   Sequence handling
+-   File formats like FASTA, VCF, BED
+-   NCBI queries
+-   Bioinformatics package use with Bioconductor

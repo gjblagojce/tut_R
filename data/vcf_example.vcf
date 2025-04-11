@@ -1,0 +1,11 @@
+##fileformat=VCFv4.2
+##source=TutorialExample
+##FILTER=<ID=q10,Description="Quality below 10">
+##FILTER=<ID=q20,Description="Quality below 20">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+chr1	10176	.	A	AC	50	PASS	DP=20
+chr1	10352	.	T	TA	60	PASS	DP=25
+chr1	10616	.	C	G	30	q10	DP=10
+chr2	20100	.	G	A	70	PASS	DP=40
+chr2	20250	.	T	C	20	q20	DP=15

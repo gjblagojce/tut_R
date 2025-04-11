@@ -1,0 +1,89 @@
+---
+title: "Sequence Alignment"
+format: html
+editor: visual
+---
+
+# 🧬 Pairwise Sequence Alignment in R
+
+This notebook demonstrates how to perform **global** and **local** sequence alignments in R using the `Biostrings` package from Bioconductor. You will:
+
+-   Learn about alignment types
+-   Set scoring systems
+-   Perform alignments
+-   View alignment scores and results.
+
+## 🔄 Types of Pairwise Alignments
+
+-   **Global alignment**: Aligns sequences end-to-end. Use when sequences are similar in length and origin.
+-   **Local alignment**: Finds best-matching local regions. Useful when comparing distant homologs.
+
+## 📦 Setup and Import
+
+```{r}
+library(Biostrings)
+library(pwalign)
+```
+
+## 1️⃣ Global Alignment (Match = 1, Mismatch = 0, No Gap Penalties)
+
+This mimics a basic global alignment where only matches contribute to the score.
+
+```{r}
+seq1 <- DNAString("AAGGTT")
+seq2 <- DNAString("AGTTAG")
+
+alignment1 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 1, mismatch = 0, baseOnly = TRUE),
+                                gapOpening = 0, gapExtension = 0, type = "global")
+
+alignment1
+cat("Score:", score(alignment1), "\n")
+
+```
+
+## 2️⃣ Global Alignment (Match = 2, Mismatch = -1)
+
+```{r}
+alignment2 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+                                gapOpening = 0, gapExtension = 0, type = "global")
+
+alignment2
+cat("Score:", score(alignment2), "\n")
+
+```
+
+## 3️⃣ Global Alignment with Gap Penalties
+
+```{r}
+alignment3 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+                                gapOpening = -2, gapExtension = -0.5, type = "global")
+
+alignment3
+cat("Score:", score(alignment3), "\n")
+
+```
+
+## 4️⃣ Local Alignment
+
+```{r}
+# Define sequences
+seq1 <- DNAString("AAGGTT")
+seq2 <- DNAString("AGTTAG")
+
+# Perform local alignment
+alignment4 <- pwalign::pairwiseAlignment(
+  seq1, seq2,
+  substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+  gapOpening = -2,
+  gapExtension = -0.5,
+  type = "local"
+)
+
+# Show alignment and score
+cat("Score:", score(alignment4), "\n")
+
+```
+
+## ✅ Summary
+
+You learned how to: - Perform global and local alignments - Set scoring and gap penalties - Use Biostrings for pairwise sequence alignment in R

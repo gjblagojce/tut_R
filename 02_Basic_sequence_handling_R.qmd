@@ -1,0 +1,129 @@
+---
+title: "Basic Sequence Handling"
+format: html
+editor: visual
+---
+
+### Basic Sequence Handling
+
+R provides powerful Bioconductor packages to work with biological sequences, such as `Biostrings` and `seqinr`. In this notebook, we explore how to manipulate DNA, RNA, and protein sequences.
+
+#### 🧬 Creating and Inspecting a DNA Sequence
+
+We start by creating a DNA sequence and printing basic information.
+
+```{r}
+library(Biostrings)
+library(seqinr)
+
+# Create DNA sequence
+seq <- DNAString("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")
+cat("Original:", as.character(seq), "\n")
+```
+
+#### 🔁 Complement and Reverse Complement
+
+```{r}
+cat("Complement:", as.character(complement(seq)), "\n")
+cat("Reverse:", as.character(reverse(seq)), "\n")
+cat("Reverse Complement:", as.character(reverseComplement(seq)), "\n")
+```
+
+#### 🔠 Counting Nucleotides
+
+```{r}
+nt_counts <- table(strsplit(as.character(seq), "")[[1]])
+print(nt_counts)
+```
+
+#### 🔄 Transcription and Translation
+
+```{r}
+# Transcription (DNA to RNA)
+rna <- RNAString(chartr("T", "U", as.character(seq)))
+cat("Transcription:", as.character(rna), "\n")
+
+# Translation
+protein <- Biostrings::translate(seq)
+cat("Translation:", as.character(protein), "\n")
+
+# Back-transcription
+back_dna <- chartr("U", "T", as.character(rna))
+cat("Back-transcribed DNA:", back_dna, "\n")
+```
+
+#### 🔢 GC Content Calculation
+
+```{r}
+gc_content <- GC(s2c(as.character(seq)))
+cat("GC Content:", gc_content, "\n")
+```
+
+#### 🧬 Codon Table & Genetic Code Info
+
+```{r}
+# Helper function to format codon table output
+printCodonTable <- function(code, label) {
+  cat(paste0("\n🧬 ", label, ":\n"))
+  for (i in seq_along(code)) {
+    cat(sprintf("%s → %s\n", names(code)[i], code[i]))
+  }
+}
+
+# Show a few available tables
+cat("🧬 Available Genetic Code Tables:\n")
+print(names(GENETIC_CODE_TABLE))
+
+# Standard Code
+std_code <- getGeneticCode()
+printCodonTable(std_code[1:10], "Standard Genetic Code (first 10)")
+
+# Vertebrate Mitochondrial
+mito_code <- getGeneticCode("2")
+printCodonTable(mito_code[1:10], "Vertebrate Mitochondrial Code (first 10)")
+
+# Invertebrate Mitochondrial
+inv_code <- getGeneticCode("5")
+printCodonTable(inv_code[1:10], "Invertebrate Mitochondrial Code (first 10)")
+```
+
+#### 🔎 Pattern Matching and Motif Search
+
+```{r}
+cat("Base frequencies:\n")
+print(alphabetFrequency(seq, baseOnly = TRUE))
+
+cat("Subsequence (positions 5 to 15):\n", as.character(subseq(seq, 5, 15)), "\n")
+
+motif <- "ATG"
+cat("Motif search ('ATG'):\n")
+print(matchPattern(motif, seq))
+
+cat("Motif count ('ATG'):\n")
+print(countPattern(motif, seq))
+```
+
+#### 🚦 Start and Stop Codons
+
+```{r}
+codon_table <- getGeneticCode()
+start_codons <- names(codon_table)[codon_table == "M"]
+stop_codons <- names(codon_table)[codon_table == "*"]
+cat("\nStart codons:", paste(start_codons, collapse = ", "), "\n")
+cat("Stop codons:", paste(stop_codons, collapse = ", "), "\n")
+```
+
+#### 🤝 Pairwise Alignment
+
+```{r}
+seq2 <- DNAString("ATGGCCATTGTAATGGCCTGCTGAAAGGGTGCCCGATAG")
+alignment <- pairwiseAlignment(seq, seq2)
+cat("Pairwise alignment:\n")
+print(alignment)
+```
+
+## ✅ Summary
+
+-   R allows powerful sequence operations using `Biostrings` and `seqinr`
+-   You can manipulate and analyze DNA, RNA, and proteins
+-   Common tasks like GC content, transcription, and translation are supported

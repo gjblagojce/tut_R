@@ -1,0 +1,115 @@
+---
+title: "Data Visualization"
+format: html
+editor: visual
+---
+
+# 📊 Bioinformatics Data Visualization in R
+
+This notebook demonstrates how to visualize: - CDS sequence properties (length, GC content) - Simulated gene expression (volcano plot) - 3D molecular structures (alternative tools)
+
+We’ll use real bacterial CDS and simulate gene data.
+
+## 1️⃣ Download E. coli CDS FASTA
+
+```{r}
+url <- "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_cds_from_genomic.fna.gz"
+destfile <- "ecoli_cds.fna.gz"
+download.file(url, destfile)
+cat("✅ Downloaded E. coli CDS FASTA\n")
+
+```
+
+## 2️⃣ Parse FASTA and Compute Length + GC
+
+```{r}
+library(Biostrings)
+
+cds <- readDNAStringSet("ecoli_cds.fna.gz")
+seq_lengths <- width(cds)
+
+# GC content calculation
+gc_content <- letterFrequency(cds, letters = c("G", "C"), as.prob = TRUE)
+gc_content_total <- rowSums(gc_content)
+
+```
+
+## 📈 Plot 1: Length Distribution
+
+```{r}
+library(ggplot2)
+df <- data.frame(Length = seq_lengths)
+
+ggplot(df, aes(x = Length)) +
+  geom_histogram(bins = 50, fill = "lightblue") +
+  labs(title = "CDS Length Distribution", x = "Length (bp)", y = "Frequency") +
+  theme_minimal()
+
+```
+
+## 📉 Plot 2: GC Content vs Length
+
+```{r}
+df$GC <- gc_content_total
+
+ggplot(df, aes(x = Length, y = GC)) +
+  geom_point(alpha = 0.5) +
+  labs(title = "GC Content vs CDS Length", x = "Length (bp)", y = "GC Content") +
+  theme_minimal()
+
+```
+
+## 🧪 Simulated Volcano Plot (Gene Expression)
+
+```{r}
+set.seed(123)
+gene_data <- data.frame(
+  log2FoldChange = rnorm(1000, 0, 2),
+  negLogP = -log10(runif(1000, 0.0001, 1))
+)
+
+ggplot(gene_data, aes(x = log2FoldChange, y = negLogP)) +
+  geom_point(alpha = 0.4) +
+  geom_vline(xintercept = c(-1, 1), linetype = "dashed", color = "red") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "blue") +
+  labs(title = "Simulated Volcano Plot", x = "log2 Fold Change", y = "-log10(p-value)") +
+  theme_minimal()
+
+```
+
+## 🧬 Optional: 3D Structure Viewer
+
+To view protein structures interactively:
+
+-   Use <https://www.rcsb.org/3d-view> and upload or search for a PDB file
+-   In Quarto HTML, you can embed `r3dmol` widgets (JavaScript)
+-   In Shiny, use `r3dmol::r3dmol()` to show structures
+
+## ✅ Summary
+
+-   Downloaded real E. coli CDS
+-   Visualized sequence length and GC content
+-   Simulated gene expression plot
+-   Described 3D structure viewing options \## 🧬 Optional: Interactive 3D Structure with r3dmol
+
+To embed 3D molecular structures in **Quarto HTML documents**, you can use the `{r3dmol}` package.
+
+### Install and Load Package
+
+```{r}
+# install.packages("r3dmol")  # Uncomment if not installed
+library(r3dmol)
+```
+
+### Example: Load PDB 1BNA (DNA Duplex)
+
+```{r}
+library(r3dmol)
+library(magrittr)
+r3dmol() %>%
+  m_add_model(data = '1BNA', format = 'pdb') %>%
+  m_set_style(style = m_style_cartoon()) %>%
+  m_zoom_to()
+```
+
+**Note**: This will only render in a Quarto HTML output or a Shiny app, not in static notebooks or PDF.
