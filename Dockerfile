@@ -18,11 +18,11 @@ RUN apt-get update && apt-get install -y \
     gdebi-core && \
     apt-get clean
 
-USER $NB_USER
-
 RUN wget https://quarto.org/download/latest/quarto-linux-amd64.deb && \
     gdebi -n quarto-linux-amd64.deb && \
     rm quarto-linux-amd64.deb
+
+USER $NB_USER
 
 RUN R -e "install.packages('BiocManager', repos = 'https://cloud.r-project.org'); \
     BiocManager::install(c('Biostrings', 'ShortRead', 'rtracklayer', 'Rsamtools', 'VariantAnnotation', 'genbankr', 'msa', 'rentrez')); \
