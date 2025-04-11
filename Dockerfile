@@ -29,3 +29,6 @@ RUN R -e "install.packages('BiocManager', repos = 'https://cloud.r-project.org')
     install.packages(c('ggplot2', 'dplyr', 'readr', 'tidyr'), repos = 'https://cloud.r-project.org')"
 
 ENV PATH="/opt/quarto/bin:$PATH"
+
+COPY . ${HOME}
+WORKDIR ${HOME}
