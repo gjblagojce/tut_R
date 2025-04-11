@@ -1,5 +1,7 @@
 FROM rocker/binder:4.2.2
 
+USER root
+
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libxml2-dev \
@@ -13,8 +15,10 @@ RUN apt-get update && apt-get install -y \
     libxt-dev \
     libhdf5-dev \
     wget \
-    gdebi-core \
-    && apt-get clean
+    gdebi-core && \
+    apt-get clean
+
+USER $NB_USER
 
 RUN wget https://quarto.org/download/latest/quarto-linux-amd64.deb && \
     gdebi -n quarto-linux-amd64.deb && \
