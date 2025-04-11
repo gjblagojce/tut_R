@@ -1,0 +1,21 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - data/
+
+website:
+  title: "Bioinformatics in R"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Introduction"
+        href: 00_Introduction_R.qmd
+      - text: "File Formats"
+        href: 01_File_formats_R.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true

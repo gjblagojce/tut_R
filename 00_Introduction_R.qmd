@@ -1,0 +1,16 @@
+---
+title: "00 - Introduction"
+format: html
+editor: visual
+---
+
+## Getting Started with Bioinformatics in R
+
+```{r}
+library(Biostrings)
+library(seqinr)
+library(rentrez)
+library(ggplot2)
+library(msa)
+print("Libraries loaded successfully!")
+```

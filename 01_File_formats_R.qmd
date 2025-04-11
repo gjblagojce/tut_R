@@ -1,0 +1,23 @@
+---
+title: "01 - File Formats"
+format: html
+editor: visual
+---
+
+## FASTA Format
+
+```{r}
+fasta_path <- "data/fasta_example.fasta"
+if (!file.exists(fasta_path)) stop("Missing file: data/fasta_example.fasta")
+seqs <- Biostrings::readDNAStringSet(fasta_path)
+print(seqs)
+```
+
+## BED Format
+
+```{r}
+bed_path <- "data/example.bed"
+if (!file.exists(bed_path)) stop("Missing file: data/example.bed")
+bed_data <- rtracklayer::import(bed_path)
+print(bed_data)
+```
