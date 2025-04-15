@@ -10,10 +10,16 @@ This notebook demonstrates how to use the `rentrez` package to access biological
 
 We'll: - List available NCBI databases - Search for the **BRCA1** gene in humans - Fetch GenBank records - Display sequence summaries
 
+> ⚠️ **Note**: These queries may fail when running inside Binder due to NCBI server rate-limits or IP blocking. It works reliably when run **locally in RStudio** with an API key.
+
 ## 📚 Step 1: View Available NCBI Databases
 
 ```{r}
 library(rentrez)
+options(
+  entrez_email = "blagoj4e@gmail.com",
+  entrez_key = "249972f5cbb1cdb2b879b6ec671812e0ba09"  # replace with your real key
+)
 dbs <- entrez_dbs()
 cat("Total databases:", length(dbs), "\n")
 head(dbs, 10)
@@ -24,13 +30,10 @@ head(dbs, 10)
 
 ```{r}
 
-library(rentrez)
-
 # Optional: set email directly in each function call
 results <- entrez_search(db = "nucleotide",
                          term = "BRCA1[Gene Name] AND Homo sapiens[Organism]",
-                         retmax = 10,
-                         email = "blagoj4e@gmail.com")
+                         retmax = 10)
 
 
 cat("Found IDs:", paste(results$ids, collapse=", "), "\n")

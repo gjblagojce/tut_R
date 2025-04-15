@@ -4,7 +4,6 @@ format: html
 editor: visual
 ---
 
-
 # 🧬 Introduction to BLAST in R
 
 **BLAST** (Basic Local Alignment Search Tool) allows you to compare a DNA or protein sequence against a database to find similarities. This notebook demonstrates a BLAST workflow in R using `rentrez`, `genbankr`, and local tools.
@@ -24,9 +23,9 @@ cat("Genome saved to ecoli_k12.gb\n")
 
 ## 🧬 Step 2: Parse GenBank and Extract Proteins
 
-## 🧬 Step 2: Parse GenBank and Extract Proteins
-
 ```{r}
+R.version.string
+
 library(genbankr)
 record <- readGenBank("ecoli_k12.gb")
 cds_features <- cds(record)

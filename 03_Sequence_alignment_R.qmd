@@ -22,7 +22,6 @@ This notebook demonstrates how to perform **global** and **local** sequence alig
 
 ```{r}
 library(Biostrings)
-library(pwalign)
 ```
 
 ## 1️⃣ Global Alignment (Match = 1, Mismatch = 0, No Gap Penalties)
@@ -33,8 +32,8 @@ This mimics a basic global alignment where only matches contribute to the score.
 seq1 <- DNAString("AAGGTT")
 seq2 <- DNAString("AGTTAG")
 
-alignment1 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 1, mismatch = 0, baseOnly = TRUE),
-                                gapOpening = 0, gapExtension = 0, type = "global")
+alignment1 <- pairwiseAlignment(DNAString("ACTG"), DNAString("ACGG"),
+                  substitutionMatrix = nucleotideSubstitutionMatrix(match = 1, mismatch = -1), gapOpening = -2, gapExtension = -0.5, type = "global")
 
 alignment1
 cat("Score:", score(alignment1), "\n")
@@ -44,7 +43,7 @@ cat("Score:", score(alignment1), "\n")
 ## 2️⃣ Global Alignment (Match = 2, Mismatch = -1)
 
 ```{r}
-alignment2 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+alignment2 <- pairwiseAlignment(seq1, seq2, substitutionMatrix = nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
                                 gapOpening = 0, gapExtension = 0, type = "global")
 
 alignment2
@@ -55,7 +54,7 @@ cat("Score:", score(alignment2), "\n")
 ## 3️⃣ Global Alignment with Gap Penalties
 
 ```{r}
-alignment3 <- pwalign::pairwiseAlignment(seq1, seq2, substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+alignment3 <- pairwiseAlignment(seq1, seq2, substitutionMatrix = nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
                                 gapOpening = -2, gapExtension = -0.5, type = "global")
 
 alignment3
@@ -71,9 +70,9 @@ seq1 <- DNAString("AAGGTT")
 seq2 <- DNAString("AGTTAG")
 
 # Perform local alignment
-alignment4 <- pwalign::pairwiseAlignment(
+alignment4 <- pairwiseAlignment(
   seq1, seq2,
-  substitutionMatrix = pwalign::nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
+  substitutionMatrix = nucleotideSubstitutionMatrix(match = 2, mismatch = -1, baseOnly = TRUE),
   gapOpening = -2,
   gapExtension = -0.5,
   type = "local"
