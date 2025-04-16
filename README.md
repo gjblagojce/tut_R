@@ -1,8 +1,3 @@
----
-editor: 
-  markdown: 
-    wrap: 72
----
 
 # 🧬 Bioinformatics in R – Quarto Web Tutorial
 
@@ -51,4 +46,4 @@ All input files are located in the `data/` folder: - `.fasta`, `.fastq`,
 
 Run this script:
 
-\`\`\`r source("requirements.R")
+requirements.R
