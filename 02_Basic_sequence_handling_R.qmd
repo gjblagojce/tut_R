@@ -117,7 +117,7 @@ cat("Stop codons:", paste(stop_codons, collapse = ", "), "\n")
 
 ```{r}
 seq2 <- DNAString("ATGGCCATTGTAATGGCCTGCTGAAAGGGTGCCCGATAG")
-alignment <- pairwiseAlignment(seq, seq2)
+alignment <- pwalign::pairwiseAlignment(seq, seq2)
 cat("Pairwise alignment:\n")
 print(alignment)
 ```

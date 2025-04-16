@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
     libhdf5-dev \
     wget \
     gdebi-core && \
+    ncbi-blast+ \
     apt-get clean
+    
 
 # Quarto
 RUN wget https://quarto.org/download/latest/quarto-linux-amd64.deb && \

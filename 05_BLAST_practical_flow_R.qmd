@@ -24,23 +24,50 @@ cat("Genome saved to ecoli_k12.gb\n")
 ## 🧬 Step 2: Parse GenBank and Extract Proteins
 
 ```{r}
-R.version.string
+extract_protein_translations <- function(file_path, min_length = 20) {
+  lines <- readLines(file_path)
+  
+  translations <- c()
+  inside_feature <- FALSE
+  current_translation <- ""
+  
+  for (line in lines) {
+    # Detect start of a CDS feature
+    if (grepl("^\\s{5}CDS\\s", line)) {
+      inside_feature <- TRUE
+      current_translation <- ""
+    }
+    
+    # Detect translation tag inside a CDS
+    if (inside_feature && grepl("/translation=", line)) {
+      current_translation <- gsub('.*="/?|"$', '', line)
+      # Sometimes translation spans multiple lines
+    } else if (inside_feature && current_translation != "" && grepl('^[ ]{21}[A-Z]+', line)) {
+      current_translation <- paste0(current_translation, gsub(" ", "", line))
+    } else if (inside_feature && current_translation != "" && !grepl('^[ ]{21}[A-Z]+', line)) {
+      # End of translation
+      inside_feature <- FALSE
+      current_translation <- gsub('"', '', current_translation)
+      if (nchar(current_translation) > min_length) {
+        translations <- c(translations, current_translation)
+      }
+      current_translation <- ""
+    }
+  }
+  
+  cat("✅ Found", length(translations), "proteins with valid translations.\n")
+  return(translations)
+}
 
-library(genbankr)
-record <- readGenBank("ecoli_k12.gb")
-cds_features <- cds(record)
-
-# Use mcols to access translations
-protein_seqs <- mcols(cds_features)$translation
-protein_seqs <- protein_seqs[!is.na(protein_seqs) & nchar(protein_seqs) > 20]
-cat("Found", length(protein_seqs), "proteins with valid translations.\n")
-
+proteins <- extract_protein_translations("ecoli_k12.gb")
+head(proteins, 3)  # Show first 3 proteins
 ```
 
 ## 💾 Step 3: Save a Protein to FASTA
 
 ```{r}
 library(Biostrings)
+protein_seqs <- extract_protein_translations("ecoli_k12.gb")
 aa <- AAStringSet(protein_seqs[1])
 names(aa) <- "ecoli_protein_1"
 writeXStringSet(aa, filepath = "ecoli_protein.fasta")

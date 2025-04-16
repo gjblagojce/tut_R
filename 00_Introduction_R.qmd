@@ -20,6 +20,19 @@ R provides a wide range of packages and tools for bioinformatics, especially via
 
 In this tutorial series, you'll learn how to handle sequence files, align sequences, retrieve NCBI data, run BLAST queries, and visualize results.
 
+```{r}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages("BiocManager")
+
+pkgs_bioc <- c("Biostrings", "Rsamtools", "ShortRead", "VariantAnnotation",
+               "msa", "rentrez", "rtracklayer")
+
+pkgs_cran <- c("ggplot2", "magrittr", "r3dmol", "seqinr", "xml2")
+
+BiocManager::install(pkgs_bioc)
+install.packages(pkgs_cran)
+
+```
 
 ## Load Required Libraries
 
@@ -31,7 +44,7 @@ library(seqinr)
 library(rentrez)
 library(ggplot2)
 library(msa)
-print("All R libraries are succesfully installed.")
+cat("All R libraries are succesfully installed.")
 ```
 
 ## Core Bioinformatics Functions (Central Dogma)

@@ -51,7 +51,6 @@ for (i in 1:length(fastq_reads)) {
 
 ```
 
-
 ### 📙 BED Format
 
 BED is used for representing genomic regions or features. We can import BED files using `rtracklayer`.

@@ -1,6 +1,9 @@
 ---
 title: "Data Visualization"
-format: html
+format:
+  html:
+    toc: true
+    embed-resources: true  # Optional: for self-contained file
 editor: visual
 ---
 
