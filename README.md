@@ -1,8 +1,8 @@
 
-# 🧬 Bioinformatics in R – Quarto Web Tutorial
+# 🧬 Bioinformatics in R – Tutorial
 
-This is a modular, web-based tutorial for learning bioinformatics
-workflows using R and Bioconductor. Built with **Quarto**, it walks
+This is a modular tutorial for learning bioinformatics
+workflows using R and Bioconductor. It walks
 through core bioinformatics file formats, sequence handling, alignment,
 database access, BLAST, and visualization.
 
@@ -46,4 +46,4 @@ All input files are located in the `data/` folder: - `.fasta`, `.fastq`,
 
 Run this script:
 
-\`\`\`r source("requirements.R")
+requirements.R
